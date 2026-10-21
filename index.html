@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dagens overblik – forside</title>
+<style>
+:root{--gray:#323D4F;--turquoise:#00A09A;--panel:#394658;--panel-soft:#414e61;--line:#596578;--paper:#323D4F}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:var(--turquoise);background:var(--gray)}
+header{background:var(--gray);color:var(--turquoise);padding:28px 24px 30px;border-bottom:2px solid var(--turquoise)}
+.header-inner,main{max-width:1240px;margin:0 auto}
+.eyebrow{margin:0 0 7px;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700;opacity:.9}
+h1{margin:0;font-size:clamp(30px,4vw,42px);letter-spacing:-.03em;color:var(--turquoise)}
+.subtitle{margin:9px 0 0;max-width:720px;line-height:1.5;color:var(--turquoise)}
+main{padding:25px 24px 40px}
+.welcome{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.welcome h2{margin:0;font-size:22px;color:var(--turquoise)}
+.date-pill{background:var(--panel-soft);color:var(--turquoise);border:1px solid var(--turquoise);border-radius:999px;padding:8px 13px;font-size:13px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 3px 10px rgba(0,0,0,.08);min-height:170px}
+.card-head{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.icon{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border-radius:12px;background:var(--panel-soft);border:1px solid var(--line);font-size:22px}
+.card h3{font-size:17px;line-height:1.25;margin:0;color:var(--turquoise)}
+.card p{font-size:14px;line-height:1.55;color:var(--turquoise);margin:0}
+.card ul{padding-left:19px;margin:0;color:var(--turquoise);font-size:14px;line-height:1.7}
+.highlight{background:var(--panel-soft);border-radius:10px;padding:12px}
+.highlight strong{display:block;color:var(--turquoise);font-size:14px;margin-bottom:4px}
+.notice{border-left:3px solid var(--turquoise);padding-left:11px}
+.people{display:flex;flex-wrap:wrap;gap:8px}
+.person{display:flex;align-items:center;gap:8px;background:var(--panel-soft);border-radius:10px;padding:8px 10px;font-size:13px;color:var(--turquoise)}
+.avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--gray);border:1px solid var(--turquoise);color:var(--turquoise);font-weight:700;font-size:11px}
+.weather{display:flex;align-items:center;gap:13px}.weather-icon{font-size:36px}.temp{font-size:28px;font-weight:750;color:var(--turquoise)}
+footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){header{padding:24px 17px}.header-inner,main{max-width:100%}main{padding:20px 14px 30px}.grid{grid-template-columns:1fr}.card{min-height:0}}
+</style>
+</head>
+<body>
+<header><div class="header-inner"><p class="eyebrow">Fælles information</p><h1>Dagens overblik</h1><p class="subtitle">Dagens program, aktiviteter og praktiske informationer – samlet på én forside.</p></div></header>
+<main>
+<div class="welcome"><h2>Velkommen</h2><span class="date-pill">Eksempel på dagens side</span></div>
+<div class="grid">
+<section class="card"><div class="card-head"><div class="icon">🥗</div><h3>Frokostmenu</h3></div><div class="highlight"><strong>Dagens frokost</strong><p>Dagens ret, salat og vegetarisk mulighed kan stå her.</p></div></section>
+<section class="card"><div class="card-head"><div class="icon">🤝</div><h3>Sociale aktiviteter</h3></div><ul><li>Kl. 10.00 – Kaffe og fællesskab</li><li>Kl. 13.00 – Spil og hygge</li></ul></section>
+<section class="card"><div class="card-head"><div class="icon">🚶</div><h3>Fysiske aktiviteter</h3></div><ul><li>Kl. 10.30 – Gåtur</li><li>Kl. 14.00 – Let bevægelse</li></ul></section>
+<section class="card"><div class="card-head"><div class="icon">📚</div><h3>Fællesundervisning</h3></div><p><strong>Kl. 11.00</strong><br>Her kan dagens emne, lokale og tidspunkt stå.</p></section>
+<section class="card"><div class="card-head"><div class="icon">💭</div><h3>Friday Minds</h3></div><p>Ugens tema og praktisk information om Friday Minds kan stå her.</p></section>
+<section class="card"><div class="card-head"><div class="icon">🗓️</div><h3>Ændringer i dagens program</h3></div><div class="notice"><p>Ingen ændringer meldt ud endnu. Opdateringer vises her.</p></div></section>
+<section class="card"><div class="card-head"><div class="icon">📌</div><h3>Praktiske beskeder</h3></div><ul><li>Husk at tjekke dagens information.</li><li>Flere beskeder kan stå her.</li></ul></section>
+<section class="card"><div class="card-head"><div class="icon">👥</div><h3>Hvem er på arbejde i dag?</h3></div><div class="people"><div class="person"><div class="avatar">AB</div><span>Medarbejder A</span></div><div class="person"><div class="avatar">CD</div><span>Medarbejder B</span></div></div><p style="margin-top:10px">Navne er eksempler.</p></section>
+<section class="card"><div class="card-head"><div class="icon">🌤️</div><h3>Vejret</h3></div><div class="weather"><div class="weather-icon">⛅</div><div><div class="temp">18°</div><p>Eksempelvis delvist skyet</p></div></div></section>
+</div>
+</main>
+<footer>Visuel skitse – alle ni emner vises på forsiden. Indholdet er kun eksempler.</footer>
+</body>
+</html>
