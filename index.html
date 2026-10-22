@@ -44,7 +44,7 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 <main>
 <div class="welcome"><h2>Velkommen</h2><span class="date-pill">Eksempel på dagens side</span></div>
 <div class="grid">
-<a class="card card-link" href="https://torvekoekken.dk/frokostordning/frokost-aalborg/frokostbuffet" target="_blank" rel="noopener noreferrer" aria-label="Åbn frokostmenu hos Torvekøkken i en ny fane"><div class="card-head"><div class="icon">🥗</div><h3>Frokostmenu ↗</h3></div><div class="highlight"><strong>Frokostbuffet mandag og torsdag</strong><p>Tryk her for at åbne frokostmenuen.</p></div></a>
+<a class="card card-link" href="https://torvekoekken.dk/frokostordning/frokost-aalborg/frokostbuffet" target="_blank" rel="noopener noreferrer" aria-label="Åbn frokostmenu hos Torvekøkken i en ny fane"><div class="card-head"><div class="icon">🥗</div><h3>Frokostmenu ↗</h3></div><div class="highlight"><strong>Dagens frokost</strong><p>Tryk her for at åbne frokostmenuen hos Torvekøkken.</p></div></a>
 <section class="card"><div class="card-head"><div class="icon">🤝</div><h3>Sociale aktiviteter</h3></div><ul><li>Kl. 10.00 – Kaffe og fællesskab</li><li>Kl. 13.00 – Spil og hygge</li></ul></section>
 <section class="card"><div class="card-head"><div class="icon">🚶</div><h3>Fysiske aktiviteter</h3></div><ul><li>Kl. 10.30 – Gåtur</li><li>Kl. 14.00 – Let bevægelse</li></ul></section>
 <section class="card"><div class="card-head"><div class="icon">📚</div><h3>Fællesundervisning</h3></div><p><strong>Kl. 11.00</strong><br>Her kan dagens emne, lokale og tidspunkt stå.</p></section>
@@ -52,9 +52,85 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 <section class="card"><div class="card-head"><div class="icon">🗓️</div><h3>Ændringer i dagens program</h3></div><div class="notice"><p>Ingen ændringer meldt ud endnu. Opdateringer vises her.</p></div></section>
 <section class="card"><div class="card-head"><div class="icon">📌</div><h3>Praktiske beskeder</h3></div><ul><li>Husk at tjekke dagens information.</li><li>Flere beskeder kan stå her.</li></ul></section>
 <section class="card"><div class="card-head"><div class="icon">👥</div><h3>Hvem er på arbejde i dag?</h3></div><div class="people"><div class="person"><div class="avatar">AB</div><span>Medarbejder A</span></div><div class="person"><div class="avatar">CD</div><span>Medarbejder B</span></div></div><p style="margin-top:10px">Navne er eksempler.</p></section>
-<section class="card"><div class="card-head"><div class="icon">🌤️</div><h3>Vejret</h3></div><div class="weather"><div class="weather-icon">⛅</div><div><div class="temp">18°</div><p>Eksempelvis delvist skyet</p></div></div></section>
+<section class="card"><div class="card-head"><div class="icon">🌤️</div><h3>Vejret i Aalborg</h3></div><div class="weather"><div class="weather-icon" id="weather-icon">🌡️</div><div><div class="temp" id="weather-temp">Henter…</div><p id="weather-description">Henter seneste måling fra DMI</p></div></div><p style="margin-top:10px" id="weather-details">Vind: henter…</p><p style="margin-top:6px;font-size:12px" id="weather-updated">Henter tidspunkt for målingen…</p><p style="margin-top:12px"><a href="https://www.dmi.dk/lokation/show/DK/2617575/Lindholm%2C_Aalborg?cHash=2c901bfee82509c51af303c87f280b3e" target="_blank" rel="noopener noreferrer" style="color:var(--turquoise);font-weight:700">Se DMI’s vejrudsigt for Aalborg ↗</a></p></section>
 </div>
 </main>
-<footer>Visuel skitse – alle ni emner vises på forsiden. Indholdet er kun eksempler.</footer>
+<footer>Visuel skitse – alle ni emner vises på forsiden. Seneste vejr-observationer hentes fra DMI for Aalborg-området.</footer>
+<script>
+// DMI's official open observation API. The box covers Aalborg and nearby stations.
+const dmiBase = 'https://opendataapi.dmi.dk/v2/metObs/collections/observation/items';
+const aalborgBox = '9.70,56.90,10.20,57.20';
+const dmiForecastUrl = 'https://www.dmi.dk/lokation/show/DK/2617575/Lindholm%2C_Aalborg?cHash=2c901bfee82509c51af303c87f280b3e';
+function dmiObservationUrl(parameterId) {
+  const params = new URLSearchParams({
+    parameterId,
+    bbox: aalborgBox,
+    'bbox-crs': 'http://www.opengis.net/def/crs/OGC/1.3/CRS84',
+    period: 'latest-hour',
+    limit: '100',
+    sortorder: 'observed,DESC'
+  });
+  return `${dmiBase}?${params.toString()}`;
+}
+function distanceKm(lon1, lat1, lon2, lat2) {
+  const rad = n => n * Math.PI / 180;
+  const dLat = rad(lat2 - lat1), dLon = rad(lon2 - lon1);
+  const a = Math.sin(dLat/2)**2 + Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
+  return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+async function getDmiFeatures(parameterId) {
+  const response = await fetch(dmiObservationUrl(parameterId));
+  if (!response.ok) throw new Error('DMI-data kunne ikke hentes');
+  const data = await response.json();
+  return (data.features || []).filter(f => Number.isFinite(Number(f.properties?.value)) && f.geometry?.coordinates);
+}
+function closestRecent(features) {
+  const now = Date.now();
+  return features
+    .filter(f => now - new Date(f.properties.observed).getTime() < 2 * 60 * 60 * 1000)
+    .sort((a,b) => {
+      const [alon, alat] = a.geometry.coordinates;
+      const [blon, blat] = b.geometry.coordinates;
+      const da = distanceKm(9.9217,57.0488,alon,alat);
+      const db = distanceKm(9.9217,57.0488,blon,blat);
+      // Prefer nearby stations, with a small penalty for older readings.
+      const sa = da + Math.max(0, now - new Date(a.properties.observed).getTime()) / 3600000 * 2;
+      const sb = db + Math.max(0, now - new Date(b.properties.observed).getTime()) / 3600000 * 2;
+      return sa - sb;
+    })[0];
+}
+async function updateWeather() {
+  const description = document.getElementById('weather-description');
+  try {
+    const [temps, winds] = await Promise.all([
+      getDmiFeatures('temp_dry'),
+      getDmiFeatures('wind_speed')
+    ]);
+    const temp = closestRecent(temps);
+    if (!temp) throw new Error('Ingen nylig temperaturmåling i nærheden af Aalborg');
+    const props = temp.properties;
+    const tempStation = props.stationId;
+    const wind = winds.find(f => f.properties.stationId === tempStation) || closestRecent(winds);
+    document.getElementById('weather-icon').textContent = '🌡️';
+    document.getElementById('weather-temp').textContent = `${Math.round(Number(props.value) * 10) / 10} °C`;
+    description.textContent = 'Seneste målte temperatur fra DMI';
+    if (wind) {
+      document.getElementById('weather-details').textContent = `Vind: ${Math.round(Number(wind.properties.value) * 3.6)} km/t`;
+    } else {
+      document.getElementById('weather-details').textContent = 'Vindmåling er ikke tilgængelig lige nu.';
+    }
+    const observed = new Date(props.observed);
+    document.getElementById('weather-updated').textContent = `Måling fra ${observed.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'})} · DMI-måling fra nærliggende station`;
+  } catch (error) {
+    document.getElementById('weather-temp').textContent = '—';
+    description.textContent = 'DMI-målingen kunne ikke hentes lige nu.';
+    document.getElementById('weather-details').textContent = 'Brug linket nedenfor for at se DMI’s aktuelle vejr og udsigt.';
+    document.getElementById('weather-updated').textContent = 'Data opdateres automatisk, når DMI svarer.';
+  }
+}
+updateWeather();
+setInterval(updateWeather, 15 * 60 * 1000);
+</script>
+
 </body>
 </html>
