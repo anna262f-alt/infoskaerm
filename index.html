@@ -98,50 +98,39 @@ function closestRecent(features) {
 }
 function describeDmiWeather(weatherValue, cloudValue) {
   const code = Number(weatherValue);
+  const clouds = Number(cloudValue);
 
+  // DMI's automatiske vejrobservationer
   const weatherCodes = {
-    0:  { icon: "☀️", text: "Klart vejr" },
-    1:  { icon: "🌤️", text: "Let skyet" },
-    2:  { icon: "⛅", text: "Delvist skyet" },
-    3:  { icon: "☁️", text: "Overskyet" },
-    45: { icon: "🌫️", text: "Tåge" },
-    48: { icon: "🌫️", text: "Tåge" },
-    51: { icon: "🌦️", text: "Let støvregn" },
-    53: { icon: "🌦️", text: "Støvregn" },
-    55: { icon: "🌧️", text: "Kraftig støvregn" },
-    61: { icon: "🌧️", text: "Let regn" },
-    63: { icon: "🌧️", text: "Regn" },
-    65: { icon: "🌧️", text: "Kraftig regn" },
-    71: { icon: "🌨️", text: "Let sne" },
-    73: { icon: "❄️", text: "Sne" },
-    75: { icon: "❄️", text: "Kraftig sne" },
-    80: { icon: "🌦️", text: "Regnbyger" },
-    81: { icon: "🌧️", text: "Regnbyger" },
-    82: { icon: "🌧️", text: "Kraftige regnbyger" },
-    95: { icon: "⛈️", text: "Tordenvejr" },
-    96: { icon: "⛈️", text: "Torden og hagl" },
-    99: { icon: "⛈️", text: "Kraftigt tordenvejr" }
+    110: { icon: "🌫️", text: "Tåge" },
+    120: { icon: "🌫️", text: "Tåge" },
+    121: { icon: "🌧️", text: "Regnvejr" },
+    123: { icon: "🌧️", text: "Regnvejr" },
+    122: { icon: "❄️", text: "Snevejr" },
+    124: { icon: "❄️", text: "Snevejr" },
+    125: { icon: "🌧️", text: "Isslag" },
+    126: { icon: "⛈️", text: "Tordenvejr" }
   };
 
   if (Number.isFinite(code) && weatherCodes[code]) {
     return weatherCodes[code];
   }
 
-  const clouds = Number(cloudValue);
-
+  // Beskrivelse ud fra DMI's skydække i oktas
   if (Number.isFinite(clouds)) {
     if (clouds <= 1) {
       return { icon: "☀️", text: "Overvejende klart" };
     }
-
-    if (clouds <= 4) {
+    if (clouds <= 3) {
+      return { icon: "🌤️", text: "Let skyet" };
+    }
+    if (clouds <= 5) {
       return { icon: "⛅", text: "Delvist skyet" };
     }
-
-    return { icon: "☁️", text: "Overvejende skyet" };
+    return { icon: "☁️", text: "Overskyet" };
   }
 
-  return { icon: "🌤️", text: "Vejrdata er begrænsede" };
+  return { icon: "🌤️", text: "Aktuelt vejr – observation mangler" };
 }
   async function updateWeather() {
   const description = document.getElementById('weather-description');
