@@ -132,42 +132,87 @@ function describeDmiWeather(weatherValue, cloudValue) {
 
   return { icon: "🌤️", text: "Aktuelt vejr – observation mangler" };
 }
-  async function updateWeather() {
+ 
+async function updateWeather() {
   const description = document.getElementById('weather-description');
+
+  const weatherCodes = {
+    0: ["☀️", "Klart vejr"],
+    1: ["🌤️", "Overvejende klart"],
+    2: ["⛅", "Delvist skyet"],
+    3: ["☁️", "Overskyet"],
+    45: ["🌫️", "Tåge"],
+    48: ["🌫️", "Tåge"],
+    51: ["🌦️", "Let støvregn"],
+    53: ["🌦️", "Støvregn"],
+    55: ["🌧️", "Kraftig støvregn"],
+    56: ["🌧️", "Underafkølet støvregn"],
+    57: ["🌧️", "Kraftig underafkølet støvregn"],
+    61: ["🌧️", "Let regn"],
+    63: ["🌧️", "Regn"],
+    65: ["🌧️", "Kraftig regn"],
+    66: ["🌧️", "Underafkølet regn"],
+    67: ["🌧️", "Kraftig underafkølet regn"],
+    71: ["🌨️", "Let sne"],
+    73: ["❄️", "Sne"],
+    75: ["❄️", "Kraftig sne"],
+    77: ["🌨️", "Snekorn"],
+    80: ["🌦️", "Regnbyger"],
+    81: ["🌧️", "Kraftige regnbyger"],
+    82: ["🌧️", "Meget kraftige regnbyger"],
+    85: ["🌨️", "Snebyger"],
+    86: ["❄️", "Kraftige snebyger"],
+    95: ["⛈️", "Tordenvejr"],
+    96: ["⛈️", "Torden og hagl"],
+    99: ["⛈️", "Kraftigt tordenvejr med hagl"]
+  };
+
   try {
-    const [temps, winds, weatherReadings, cloudReadings] = await Promise.all([
-      getDmiFeatures('temp_dry'),
-      getDmiFeatures('wind_speed'),
-      getDmiFeatures('weather').catch(() => []),
-      getDmiFeatures('cloud_cover').catch(() => [])
-    ]);
-    const temp = closestRecent(temps);
-    if (!temp) throw new Error('Ingen nylig temperaturmåling i nærheden af Aalborg');
-    const props = temp.properties;
-    const tempStation = props.stationId;
-    const wind = winds.find(f => f.properties.stationId === tempStation) || closestRecent(winds);
-    const weather = weatherReadings.find(f => f.properties.stationId === tempStation) || closestRecent(weatherReadings);
-    const clouds = cloudReadings.find(f => f.properties.stationId === tempStation) || closestRecent(cloudReadings);
-    const currentWeather = describeDmiWeather(weather?.properties.value, clouds?.properties.value);
-    document.getElementById('weather-icon').textContent = currentWeather.icon;
-    document.getElementById('weather-temp').textContent = `${Math.round(Number(props.value) * 10) / 10} °C`;
-    description.textContent = currentWeather.text;
-    if (wind) {
-      document.getElementById('weather-details').textContent = `Vind: ${Math.round(Number(wind.properties.value) * 10) / 10} m/s`;
-    } else {
-      document.getElementById('weather-details').textContent = 'Vindmåling er ikke tilgængelig lige nu.';
-    }
-    const observed = new Date(props.observed);
-    document.getElementById('weather-updated').textContent = `Måling fra ${observed.toLocaleTimeString('da-DK',{hour:'2-digit',minute:'2-digit'})} · DMI-måling fra nærliggende station`;
+    const url =
+      'https://api.open-meteo.com/v1/forecast' +
+      '?latitude=57.0488&longitude=9.9217' +
+      '&current=temperature_2m,wind_speed_10m,weather_code' +
+      '&timezone=Europe%2FCopenhagen';
+
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Vejrdata kunne ikke hentes');
+
+    const data = await response.json();
+    const current = data.current;
+    const weather = weatherCodes[current.weather_code];
+
+    document.getElementById('weather-temp').textContent =
+      `${Math.round(current.temperature_2m * 10) / 10} °C`;
+
+    document.getElementById('weather-icon').textContent =
+      weather ? weather[0] : "🌤️";
+
+    description.textContent =
+      weather ? weather[1] : "Vejrbeskrivelse ikke tilgængelig";
+
+    document.getElementById('weather-details').textContent =
+      `Vind: ${Math.round(current.wind_speed_10m * 10) / 10} km/t`;
+
+    document.getElementById('weather-updated').textContent =
+      `Seneste opdatering: ${new Date(current.time).toLocaleTimeString(
+        'da-DK',
+        { hour: '2-digit', minute: '2-digit' }
+      )} · Vejrdata fra Open-Meteo`;
+
   } catch (error) {
     document.getElementById('weather-temp').textContent = '—';
-    description.textContent = 'DMI-målingen kunne ikke hentes lige nu.';
-    document.getElementById('weather-details').textContent = 'Brug linket nedenfor for at se DMI’s aktuelle vejr og udsigt.';
-    document.getElementById('weather-updated').textContent = 'Data opdateres automatisk, når DMI svarer.';
+    document.getElementById('weather-icon').textContent = '🌡️';
+    description.textContent = 'Vejret kunne ikke hentes lige nu.';
+    document.getElementById('weather-details').textContent =
+      'Prøv igen om lidt.';
+    document.getElementById('weather-updated').textContent =
+      'Vejrdata opdateres automatisk.';
   }
 }
+
 updateWeather();
 setInterval(updateWeather, 15 * 60 * 1000);
+
 </script>
 
 </body>
