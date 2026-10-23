@@ -198,7 +198,7 @@ async function updateWeather() {
       `Seneste opdatering: ${new Date(current.time).toLocaleTimeString(
         'da-DK',
         { hour: '2-digit', minute: '2-digit' }
-      )} · Vejrdata fra Open-Meteo`;
+      )} · Tryk her for at åbne vejrudsigten`;
 
   } catch (error) {
     document.getElementById('weather-temp').textContent = '—';
