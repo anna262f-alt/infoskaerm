@@ -172,6 +172,7 @@ async function updateWeather() {
       'https://api.open-meteo.com/v1/forecast' +
       '?latitude=57.0488&longitude=9.9217' +
       '&current=temperature_2m,wind_speed_10m,weather_code' +
+      '&wind_speed_unit=ms' +
       '&timezone=Europe%2FCopenhagen';
 
     const response = await fetch(url);
@@ -191,7 +192,7 @@ async function updateWeather() {
       weather ? weather[1] : "Vejrbeskrivelse ikke tilgængelig";
 
     document.getElementById('weather-details').textContent =
-      `Vind: ${Math.round(current.wind_speed_10m * 10) / 10} km/t`;
+      `Vind: ${Math.round(current.wind_speed_10m * 10) / 10} m/s`;
 
     document.getElementById('weather-updated').textContent =
       `Seneste opdatering: ${new Date(current.time).toLocaleTimeString(
