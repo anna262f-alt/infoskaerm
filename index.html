@@ -47,7 +47,7 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 <section class="card"><div class="card-head"><div class="icon">🚶</div><h3>Fysiske aktiviteter</h3></div><ul><li>Kl. 10.30 – Gåtur</li><li>Kl. 14.00 – Let bevægelse</li></ul></section>
 <section class="card"><div class="card-head"><div class="icon">📚</div><h3>Fællesundervisning</h3></div><p><strong>Onsdag kl. 10.00 - 11.00</strong><br>Praktisk værksted</p><p><strong>Torsdag kl. 10.00 - 11.00</strong><br>Historie og samfundsfag.</p></section>
 <section class="card"><div class="card-head"><div class="icon">💭</div><h3>Friday Minds</h3></div><p>Ugens tema og praktisk information om Friday Minds kan stå her.</p></section>
-<section class="card card-link" onclick="window.location.href='diagram.html'" style="cursor:pointer;">
+<a href="diagram.html" class="card card-link">
   <div class="card-head">
     <div class="icon">📊</div>
     <h3>Fritidsdiagram</h3>
@@ -55,7 +55,7 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
   <div class="notice">
     <p>Se hvad folk laver i deres fritid.</p>
   </div>
-</section>
+</a>
 <section class="card"><div class="card-head"><div class="icon">📌</div><h3>Praktiske beskeder</h3></div><ul><li>Husk at tjekke dagens information.</li><li>Flere beskeder kan stå her.</li></ul></section>
 <a class="card card-link" href="find-vej.html" aria-label="Find vej til en medarbejder"><div class="card-head"><div class="icon">🧭</div><h3>Find vej ↗</h3></div><div class="highlight"><strong>Find en medarbejder</strong><p>Tryk her for at se medarbejderne og finde vej til dem.</p></div></a>
 <a class="card card-link" href="https://www.dmi.dk/lokation/show/DK/2624886/Aalborg" target="_blank" rel="noopener noreferrer" aria-label="Åbn DMI's vejrudsigt for Aalborg i en ny fane"><div class="card-head"><div class="icon">🌤️</div><h3>Vejret i Aalborg ↗</h3></div><div class="weather"><div class="weather-icon" id="weather-icon">🌡️</div><div><div class="temp" id="weather-temp">Henter…</div><p id="weather-description">Henter seneste måling fra DMI</p></div></div><p style="margin-top:10px" id="weather-details">Vind: henter…</p><p style="margin-top:6px;font-size:12px" id="weather-updated">Henter tidspunkt for målingen…</p></a>
