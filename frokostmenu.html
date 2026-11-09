@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frokostmenu</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 25px;
+      background: #323D4F;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .skema {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .skema th,
+    .skema td {
+      border: 2px solid #00A09A;
+      padding: 20px 10px;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .skema th {
+      background: #00A09A;
+      color: white;
+      font-size: 22px;
+    }
+
+    .skema td {
+      background: #394658;
+      height: 180px;
+      font-size: 20px;
+    }
+
+    .tilbage {
+      display: block;
+      width: fit-content;
+      margin: 30px auto 0;
+      padding: 14px 22px;
+      background: #00A09A;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 650px) {
+      body {
+        padding: 10px;
+      }
+
+      .skema {
+        min-width: 650px;
+      }
+
+      .skema-ramme {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Frokostmenu</h1>
+
+  <div class="skema-ramme">
+    <table class="skema">
+      <tr>
+        <th>Mandag</th>
+        <th>Tirsdag</th>
+        <th>Onsdag</th>
+        <th>Torsdag</th>
+        <th>Fredag</th>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+
+  <a class="tilbage" href="index.html">
+    ← Tilbage til forsiden
+  </a>
+
+</body>
+</html>
