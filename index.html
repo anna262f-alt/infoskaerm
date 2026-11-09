@@ -37,6 +37,35 @@ main{padding:25px 24px 40px}
 footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){header{padding:24px 17px}.header-inner,main{max-width:100%}main{padding:20px 14px 30px}.grid{grid-template-columns:1fr}.card{min-height:0}}
+.frokost-kort {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 26px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  text-decoration: none;
+}
+
+.frokost-ikon {
+  width: 62px;
+  height: 62px;
+  min-width: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-soft);
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  font-size: 32px;
+}
+
+.frokost-kort h2 {
+  color: var(--turquoise);
+  margin: 0;
+  font-size: 24px;
+}
 </style>
 </head>
 <body>
@@ -45,6 +74,16 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 <a class="card card-link frokost-kort" href="frokostmenu.html">
   <div class="frokost-ikon">🍽️</div>
   <h2>Frokostmenu ↗</h2>
+</a>
+<a href="frokostmenu.html" class="card card-link">
+  <div class="card-head">
+    <div class="icon">🍽️</div>
+    <h3>Frokostmenu</h3>
+    <span class="card-arrow">↗</span>
+  </div>
+  <div class="notice">
+    <p>Se frokostmenuen her.</p>
+  </div>
 </a>
 <section class="card"><div class="card-head"><div class="icon">🤝</div><h3>Sociale aktiviteter</h3></div><p><strong>Mandag - torsdag kl. 10.00 - 11.00</strong><br>Fællespause</p></section>
 <section class="card"><div class="card-head"><div class="icon">🚶</div><h3>Fysiske aktiviteter</h3></div><ul><li>Kl. 10.30 – Gåtur</li><li>Kl. 14.00 – Let bevægelse</li></ul></section>
