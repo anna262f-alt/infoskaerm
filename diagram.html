@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fritidsaktiviteter</title>
-
 <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 <style>
@@ -17,9 +16,7 @@ body {
   color: white;
 }
 
-h1 {
-  text-align: center;
-}
+h1 { text-align: center; }
 
 #diagram {
   width: 100%;
@@ -36,8 +33,8 @@ h1 {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(85%, 420px);
-  max-height: 70vh;
+  width: min(85%, 480px);
+  max-height: 75vh;
   overflow-y: auto;
   background: white;
   color: #323D4F;
@@ -47,9 +44,7 @@ h1 {
   z-index: 10;
 }
 
-#popup h2 {
-  margin-top: 0;
-}
+#popup h2 { margin-top: 0; }
 
 #luk {
   float: right;
@@ -59,11 +54,26 @@ h1 {
   background: none;
 }
 
-.person {
-  padding: 8px;
-  margin: 5px 0;
+.person, .valg-felt {
+  padding: 10px;
+  margin: 6px 0;
   background: #edf1f5;
   border-radius: 6px;
+}
+
+.valg-felt h3 {
+  margin: 0 0 8px;
+  color: #007f7a;
+}
+
+.valg-antal {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.personer {
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .tilbage {
@@ -81,7 +91,6 @@ h1 {
 <body>
 
 <h1>Hvad laver folk i deres fritid?</h1>
-
 <div id="diagram">Henter diagram ...</div>
 
 <div id="popup">
@@ -97,61 +106,45 @@ const API = "https://script.google.com/macros/s/AKfycbylNU5Ccc5CCL_Jnjhya2iC_wmO
 
 let alleData = [];
 
-google.charts.load("current", {
-  packages: ["corechart"]
-});
-
+google.charts.load("current", { packages: ["corechart"] });
 google.charts.setOnLoadCallback(hentData);
 
 function hentData() {
-  const callback = "modtagData";
-
-  window[callback] = function(data) {
-    alleData = data.aktiviteter.concat(
-      data.forslag.map(f => ({
-        navn: f.navn,
-        antal: f.personer.length,
-        personer: f.personer
-      }))
-    );
-
+  window.modtagData = function(data) {
+    alleData = data.aktiviteter || [];
     tegnDiagram();
   };
 
   const script = document.createElement("script");
-  script.src = API + "?callback=" + callback;
+  script.src = API + "?callback=modtagData&t=" + Date.now();
+
   script.onerror = function() {
     document.getElementById("diagram").innerText =
-      "Diagrammet kunne ikke hentes. Prøv at genindlæse siden.";
+      "Diagrammet kunne ikke hentes. Prøv igen.";
   };
+
   document.body.appendChild(script);
 }
 
 function tegnDiagram() {
   const data = new google.visualization.DataTable();
-
   data.addColumn("string", "Aktivitet");
   data.addColumn("number", "Antal svar");
 
   alleData.forEach(item => {
-    data.addRow([item.navn, item.antal]);
+    data.addRow([item.navn, Number(item.antal) || 0]);
   });
 
   const diagram = new google.visualization.BarChart(
     document.getElementById("diagram")
   );
 
-  google.visualization.events.addListener(
-    diagram,
-    "select",
-    function() {
-      const valg = diagram.getSelection();
-
-      if (valg.length > 0) {
-        visPopup(alleData[valg[0].row]);
-      }
+  google.visualization.events.addListener(diagram, "select", function() {
+    const valg = diagram.getSelection();
+    if (valg.length > 0) {
+      visPopup(alleData[valg[0].row]);
     }
-  );
+  });
 
   diagram.draw(data, {
     title: "Antal svar pr. aktivitet",
@@ -159,7 +152,7 @@ function tegnDiagram() {
     colors: ["#00A09A"],
     backgroundColor: "white",
     chartArea: {
-      left: 150,
+      left: 175,
       right: 30,
       top: 50,
       bottom: 50,
@@ -171,29 +164,56 @@ function tegnDiagram() {
       format: "0",
       title: "Antal svar"
     },
-    vAxis: {
-      textStyle: { fontSize: 12 }
-    },
+    vAxis: { textStyle: { fontSize: 12 } },
     height: 630
   });
 }
 
 function visPopup(item) {
   document.getElementById("popupTitel").innerText =
-    item.navn + " (" + item.antal + ")";
+    item.navn + " – " + item.antal + " svar";
 
   const indhold = document.getElementById("popupIndhold");
   indhold.innerHTML = "";
 
-  if (!item.personer || item.personer.length === 0) {
-    indhold.innerText = "Ingen navne at vise.";
-  } else {
-    item.personer.forEach(navn => {
+  if (item.valgmuligheder && item.valgmuligheder.length) {
+    item.valgmuligheder.forEach(valg => {
       const felt = document.createElement("div");
-      felt.className = "person";
-      felt.textContent = navn;
+      felt.className = "valg-felt";
+
+      const titel = document.createElement("h3");
+      titel.textContent = valg.navn;
+
+      const antal = document.createElement("div");
+      antal.className = "valg-antal";
+      antal.textContent = valg.antal + " svar";
+
+      const personer = document.createElement("div");
+      personer.className = "personer";
+
+      const navne = valg.personer || [];
+      personer.textContent = navne.length
+        ? "Navne: " + navne.join(", ")
+        : "Ingen navne oplyst.";
+
+      felt.appendChild(titel);
+      felt.appendChild(antal);
+      felt.appendChild(personer);
       indhold.appendChild(felt);
     });
+  } else {
+    const antal = document.createElement("div");
+    antal.className = "valg-antal";
+    antal.textContent = item.antal + " svar";
+    indhold.appendChild(antal);
+
+    const personer = document.createElement("div");
+    personer.className = "personer";
+    personer.textContent = item.personer && item.personer.length
+      ? "Navne: " + item.personer.join(", ")
+      : "Ingen navne oplyst.";
+
+    indhold.appendChild(personer);
   }
 
   document.getElementById("popup").style.display = "block";
@@ -207,7 +227,6 @@ window.addEventListener("resize", () => {
   if (alleData.length) tegnDiagram();
 });
 
-// Hent nye tal hvert minut
 setInterval(hentData, 60000);
 </script>
 
