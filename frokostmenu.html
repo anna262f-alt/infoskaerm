@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -48,6 +47,23 @@
       font-size: 20px;
     }
 
+    .menu-link {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      background: #00A09A;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .menu-link:hover {
+      background: #008b85;
+      transform: translateY(-3px);
+    }
+    
     .tilbage {
       display: block;
       width: fit-content;
@@ -61,6 +77,50 @@
       font-weight: bold;
     }
 
+        /* Pop op-vindue */
+
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .menu-vindue {
+      position: relative;
+      width: 90%;
+      max-width: 950px;
+      height: 80vh;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .menu-vindue iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .luk-menu {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      z-index: 10;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #00A09A;
+      color: white;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    
     @media (max-width: 650px) {
       body {
         padding: 10px;
@@ -92,10 +152,22 @@
       </tr>
 
       <tr>
-        <td><strong>Jespers Torvekøkken</strong><br>Tryk for at se menuen</td>
+       <td>
+          <button class="menu-link" onclick="visMenu()">
+            <strong>Jespers Torvekøkken ↗</strong>
+          </button>
+          <br><br>
+          Tryk for at se menuen
+        </td>
         <td><strong>Pernille laver frokost</strong><br>Sandwich med kylling og bacon<br>Sandwich med ost og skinke<br>Toast</td>
         <td><strong>Pernille laver frokost</strong><br>Sandwich med kylling og bacon<br>Sandwich med ost og skinke<br>Toast</td>
-        <td><strong>Jespers Torvekøkken</strong><br>Tryk for at se menuen</td>
+         <td>
+          <button class="menu-link" onclick="visMenu()">
+            <strong>Jespers Torvekøkken ↗</strong>
+          </button>
+          <br><br>
+          Tryk for at se menuen
+        </td>
         <td><strong>Pernille laver frokost</strong><br>Sandwich med kylling og bacon<br>Sandwich med ost og skinke<br>Toast</td>
       </tr>
     </table>
@@ -104,6 +176,44 @@
   <a class="tilbage" href="index.html">
     ← Tilbage til forsiden
   </a>
+
+   <!-- Pop op-vindue -->
+
+  <div class="menu-overlay" id="menuOverlay">
+    <div class="menu-vindue">
+
+      <button class="luk-menu" onclick="lukMenu()">
+        ×
+      </button>
+
+      <iframe
+        id="menuIframe"
+        title="Jespers Torvekøkkens frokostmenu"
+        src="about:blank">
+      </iframe>
+
+    </div>
+  </div>
+
+  <script>
+    function visMenu() {
+      document.getElementById("menuOverlay").style.display = "flex";
+
+      document.getElementById("menuIframe").src =
+        "https://torvekoekken.dk/frokostordning/frokost-aalborg/frokostbuffet";
+    }
+
+    function lukMenu() {
+      document.getElementById("menuOverlay").style.display = "none";
+      document.getElementById("menuIframe").src = "about:blank";
+    }
+
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        lukMenu();
+      }
+    });
+  </script>
 
 </body>
 </html>
