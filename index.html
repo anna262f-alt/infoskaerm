@@ -185,56 +185,20 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 </button>
 </div>
   
-<!-- DMI pop op-vindue -->
-
-<div class="dmi-overlay" id="dmiOverlay">
-
-  <div class="dmi-vindue">
-
-    <button class="dmi-luk"
-      onclick="lukDmi()"
-      aria-label="Luk DMI">
-      ×
-    </button>
-
-    <iframe
-      id="dmiIframe"
-      src="about:blank"
-      title="DMI vejrudsigt for Aalborg">
-    </iframe>
-
-  </div>
-
-</div>
 </main>
 <script>
 
 function visDmi() {
-  document.getElementById("dmiOverlay").style.display = "flex";
+  const vindue = window.open(
+    "https://www.dmi.dk/lokation/show/DK/2624886/Aalborg",
+    "DMIvejr",
+    "width=1100,height=750,resizable=yes,scrollbars=yes"
+  );
 
-  document.getElementById("dmiIframe").src =
-    "https://www.dmi.dk/lokation/show/DK/2624886/Aalborg";
-}
-
-function lukDmi() {
-  document.getElementById("dmiOverlay").style.display = "none";
-
-  document.getElementById("dmiIframe").src = "about:blank";
-}
-
-// Luk DMI med Escape-tasten
-document.addEventListener("keydown", function(e) {
-  if (e.key === "Escape") {
-    lukDmi();
+  if (vindue) {
+    vindue.focus();
   }
-});
-
-// Luk ved klik uden for vinduet
-document.getElementById("dmiOverlay").addEventListener("click", function(e) {
-  if (e.target === this) {
-    lukDmi();
-  }
-});
+}
   
 // DMI's official open observation API. The box covers Aalborg and nearby stations.
 const dmiBase = 'https://opendataapi.dmi.dk/v2/metObs/collections/observation/items';
