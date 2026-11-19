@@ -23,15 +23,26 @@
       margin: 30px auto;
     }
 
-    .medarbejder {
-      display: block;
-      background: white;
-      padding: 14px;
-      border-radius: 14px;
-      text-decoration: none;
-      color: inherit;
-      box-shadow: 0 3px 10px #00000015;
-    }
+  .medarbejder {
+  display: block;
+  background: white;
+  padding: 14px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 3px 10px #00000015;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.medarbejder:hover {
+  transform: translateY(-2px);
+}
+
+.medarbejder:active {
+  transform: scale(0.95);
+  box-shadow: 0 1px 4px #00000030;
+}
 
     .medarbejder img {
       width: 100%;
