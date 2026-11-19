@@ -23,14 +23,28 @@ main{padding:25px 24px 40px}
 button.card-link {
   appearance: none;
   -webkit-appearance: none;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
   width: 100%;
+  min-height: 170px;
+  padding: 18px;
   font-family: inherit;
   font-size: inherit;
   line-height: normal;
   color: inherit;
   text-align: left;
   cursor: pointer;
+}
+
+button.card-link .card-head {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+button.card-link p {
+  margin-top: 0;
 }
 
 button.card-link .card-head {
