@@ -20,6 +20,30 @@ main{padding:25px 24px 40px}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 3px 10px rgba(0,0,0,.08);min-height:170px}
 .card-link{display:block;color:inherit;text-decoration:none;cursor:pointer;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+button.card-link {
+  appearance: none;
+  -webkit-appearance: none;
+  display: block;
+  width: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: normal;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+button.card-link .card-head {
+  margin-bottom: 12px;
+}
+
+button.card-link h3 {
+  font-family: inherit;
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 700;
+  margin: 0;
+}
 .card-link:hover,.card-link:focus-visible{border-color:var(--turquoise);box-shadow:0 5px 16px rgba(0,0,0,.2);transform:translateY(-2px);outline:none}
 .card-link:focus-visible{outline:2px solid var(--turquoise);outline-offset:3px}
 .card-head{display:flex;align-items:center;gap:11px;margin-bottom:12px}
@@ -204,17 +228,17 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 <section class="card"><div class="card-head"><div class="icon">🤝</div><h3>Sociale aktiviteter</h3></div><p><strong>Mandag - torsdag kl. 10.00 - 11.00</strong><br>Fællespause</p></section>
 <button type="button"
   class="card card-link"
-  onclick="visOmSpecialMinds()"
-  style="width:100%;text-align:left;color:inherit;font:inherit">
+  onclick="visOmSpecialMinds()">
 
   <div class="card-head">
     <div class="icon logo-icon">
       <img src="special-minds-logo.png" alt="Special Minds">
     </div>
-    <h3>Om Special Minds <span class="frokost-pil">↗</span></h3>
+    <h3>Om Special Minds ↗</h3>
   </div>
 
   <p>Tryk her for at se hvad man bl.a. kan lave på Special Minds</p>
+
 </button>
 <section class="card"><div class="card-head"><div class="icon">📚</div><h3>Fællesundervisning</h3></div><p><strong>Onsdag kl. 10.00 - 11.00</strong><br>Praktisk værksted</p><p><strong>Torsdag kl. 10.00 - 11.00</strong><br>Historie og samfundsfag.</p></section>
 <section class="card"><div class="card-head"><div class="icon">💭</div><h3>Friday Minds</h3></div><p>Ugens tema og praktisk information om Friday Minds kan stå her.</p></section>
