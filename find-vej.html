@@ -32,16 +32,17 @@
   color: inherit;
   box-shadow: 0 3px 10px #00000015;
   cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .medarbejder:hover {
-  transform: translateY(-2px);
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
 }
 
 .medarbejder:active {
   transform: scale(0.95);
-  box-shadow: 0 1px 4px #00000030;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
     .medarbejder img {
@@ -60,14 +61,6 @@
       margin: 20px;
     } 
     
-    .medarbejder {
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    
-    .medarbejder:hover {
-      transform: translateY(-8px) scale(1.04);
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
-    }
   /* Automatisk tilbagefunktion */
 
 .inaktiv-overlay {
