@@ -130,8 +130,56 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
     height: 85vh;
   }
 }
+/* Pop op-vindue til Om Special Minds */
+
+.om-sm-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 3000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.om-sm-vindue {
+  position: relative;
+  width: 90%;
+  max-width: 950px;
+  height: 80vh;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.om-sm-vindue iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.om-sm-luk {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 10;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #00A09A;
+  color: white;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.om-sm-overlay.aktiv {
+  display: flex;
+}
 </style>
 </head>
+  
 <body>
 <main>
 <div class="grid">
@@ -144,7 +192,10 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
   <p>Tryk her for at se frokostmenuen.</p>
 </a>
 <section class="card"><div class="card-head"><div class="icon">🤝</div><h3>Sociale aktiviteter</h3></div><p><strong>Mandag - torsdag kl. 10.00 - 11.00</strong><br>Fællespause</p></section>
-<section class="card card-link">
+<button type="button"
+  class="card card-link"
+  onclick="visOmSpecialMinds()"
+  style="width:100%;text-align:left;color:inherit;font:inherit">
   <div class="card-head">
     <div class="icon logo-icon">
       <img src="special-minds-logo.png" alt="Special Minds">
@@ -152,7 +203,7 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
     <h3>Om Special Minds ↗</h3>
   </div>
   <p>Tryk her for at se hvad man bl.a. kan lave på Special Minds</p>
-</section>
+</button>
 <section class="card"><div class="card-head"><div class="icon">📚</div><h3>Fællesundervisning</h3></div><p><strong>Onsdag kl. 10.00 - 11.00</strong><br>Praktisk værksted</p><p><strong>Torsdag kl. 10.00 - 11.00</strong><br>Historie og samfundsfag.</p></section>
 <section class="card"><div class="card-head"><div class="icon">💭</div><h3>Friday Minds</h3></div><p>Ugens tema og praktisk information om Friday Minds kan stå her.</p></section>
 <a href="diagram.html" class="card card-link">
@@ -198,8 +249,54 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 </div>
   
 </main>
-<script>
+  
+<!-- Pop op-vindue Om Special Minds -->
 
+<div class="om-sm-overlay" id="omSmOverlay"
+     onclick="lukOmSpecialMinds(event)">
+
+  <div class="om-sm-vindue">
+
+    <button class="om-sm-luk"
+      onclick="lukOmSpecialMinds(event)">
+      ×
+    </button>
+
+    <iframe
+      id="omSmIframe"
+      title="Om Special Minds"
+      src="about:blank">
+    </iframe>
+
+  </div>
+</div>
+  
+<script>
+function visOmSpecialMinds() {
+  document.getElementById("omSmOverlay").style.display = "flex";
+
+  document.getElementById("omSmIframe").src =
+    "https://caro705.github.io/SM-messe-film/";
+}
+
+function lukOmSpecialMinds(event) {
+  if (
+    !event ||
+    event.target.id === "omSmOverlay" ||
+    event.target.classList.contains("om-sm-luk")
+  ) {
+    document.getElementById("omSmOverlay").style.display = "none";
+
+    document.getElementById("omSmIframe").src = "about:blank";
+  }
+}
+  document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    lukOmSpecialMinds();
+  }
+});
+
+  
 function visDmi() {
   const vindue = window.open(
     "https://www.dmi.dk/lokation/show/DK/2624886/Aalborg",
