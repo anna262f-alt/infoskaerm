@@ -58,6 +58,80 @@
   <a class="tilbage" href="index.html">
     ← Tilbage til forsiden
   </a>
+<!-- Automatisk tilbagefunktion -->
 
+<div class="inaktiv-overlay" id="inaktivOverlay">
+  <div class="inaktiv-vindue">
+
+    <h2>Er du her stadig?</h2>
+
+    <p>
+      Hvis du vil blive på siden, skal du trykke på knappen nedenfor.
+      Ellers vender skærmen automatisk tilbage til forsiden.
+    </p>
+
+    <button class="inaktiv-knap"
+      onclick="blivPaaSiden()">
+      Jeg vil blive på siden
+    </button>
+
+    <div class="inaktiv-streg">
+      <div class="inaktiv-streg-indhold"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let inaktivTimer;
+let tilbageTimer;
+
+const INAKTIV_TID = 60 * 1000;
+const TILBAGE_TID = 10 * 1000;
+
+function startInaktivTimer() {
+  clearTimeout(inaktivTimer);
+
+  inaktivTimer = setTimeout(visInaktivBesked, INAKTIV_TID);
+}
+
+function visInaktivBesked() {
+  const overlay = document.getElementById("inaktivOverlay");
+
+  overlay.classList.add("vis");
+
+  const streg = overlay.querySelector(".inaktiv-streg-indhold");
+
+  // Genstart stregens animation
+  streg.style.animation = "none";
+  void streg.offsetWidth;
+  streg.style.animation = "inaktivNedtaelling 10s linear forwards";
+
+  tilbageTimer = setTimeout(function() {
+    window.location.href = "index.html";
+  }, TILBAGE_TID);
+}
+
+function blivPaaSiden() {
+  clearTimeout(tilbageTimer);
+
+  document.getElementById("inaktivOverlay").classList.remove("vis");
+
+  startInaktivTimer();
+}
+
+// Aktivitet på skærmen nulstiller minuttet
+["pointerdown", "keydown", "wheel"].forEach(function(hændelse) {
+  document.addEventListener(hændelse, function() {
+    if (!document.getElementById("inaktivOverlay").classList.contains("vis")) {
+      startInaktivTimer();
+    }
+  }, { passive: true });
+});
+
+// Start automatisk
+startInaktivTimer();
+</script>
+  
 </body>
 </html>
