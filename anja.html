@@ -160,7 +160,7 @@
 let inaktivTimer;
 let tilbageTimer;
 
-const INAKTIV_TID = 60 * 1000;
+const INAKTIV_TID = 10 * 1000;
 const TILBAGE_TID = 10 * 1000;
 
 function startInaktivTimer() {
@@ -203,8 +203,12 @@ function blivPaaSiden() {
   }, { passive: true });
 });
 
-// Start automatisk
-startInaktivTimer();
+// Start først timeren, når videoen er færdig
+const video = document.querySelector("video");
+
+video.addEventListener("ended", function() {
+  startInaktivTimer();
+});
 </script>
 
 </body>
