@@ -204,8 +204,12 @@ function blivPaaSiden() {
   }, { passive: true });
 });
 
-// Start automatisk
-startInaktivTimer();
+// Start først timeren, når videoen er færdig
+const video = document.querySelector("video");
+
+video.addEventListener("ended", function() {
+  startInaktivTimer();
+});
 </script>
   
 </body>
