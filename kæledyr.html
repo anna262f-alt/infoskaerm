@@ -106,46 +106,26 @@ h1 {
 
 <script>
 
-// INDSÆT DINE BILLEDFILNAVNE HER
+// DINE BILLEDFILNAVNE
 const billeder = [
   "Anonym -  Milo.png"
 ];
 
-// Her vises billedet og navnene
 let aktuel = 0;
 
 function visBillede() {
+
   const fil = billeder[aktuel];
 
   const billedmappe =
     "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/";
 
-  document.getElementById("foto").src =
-    billedmappe + encodeURIComponent(fil);
+  const foto = document.getElementById("foto");
+
+  foto.src = billedmappe + encodeURIComponent(fil);
 
   let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
-  navn = navn.replace(/\s*-\s*/, " – ");
   navn = navn.replace(/_/g, " ");
-
-  document.getElementById("billedtekst").textContent = navn;
-
-  document.getElementById("nummer").textContent =
-    (aktuel + 1) + " / " + billeder.length;
-}
-
- document.getElementById("foto").src =
-  "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/" + encodeURIComponent(fil);
-
-  // Fjern filtypen
-  let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
-
-  // Fjern nummer til sidst
-  navn = navn.replace(/_\d+$/, "");
-
-  // Erstat understregninger med mellemrum
-  navn = navn.replace(/_/g, " ");
-
-  // Vis ejer – kæledyr
   navn = navn.replace(/\s*-\s*/, " – ");
 
   document.getElementById("billedtekst").textContent = navn;
@@ -164,7 +144,6 @@ function forrige() {
   visBillede();
 }
 
-// Start slideshow
 visBillede();
 
 </script>
