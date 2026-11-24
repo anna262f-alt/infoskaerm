@@ -149,8 +149,8 @@ let aktuel = 0;
 function visBillede() {
   const fil = billeder[aktuel];
 
-  document.getElementById("foto").src =
-    "kæledyrsbilleder/" + fil;
+ document.getElementById("foto").src =
+  "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/" + encodeURIComponent(fil);
 
   // Fjern filtypen
   let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
