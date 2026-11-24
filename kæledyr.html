@@ -66,6 +66,11 @@ h1 {
   transform: scale(0.95);
 }
 
+.knapper button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .tilbage {
   display: inline-block;
   margin-top: 25px;
@@ -169,10 +174,14 @@ h1 {
   <div id="billedtekst" class="billedtekst"></div>
 
   <div class="knapper">
-    <button onclick="forrige()">← Forrige</button>
-    <button onclick="naeste()">Næste →</button>
-  </div>
+  <button onclick="forrige()">← Forrige</button>
 
+  <button id="pauseKnap" onclick="pauseSlideshow()">
+    ⏸ Pause
+  </button>
+
+  <button onclick="naeste()">Næste →</button>
+</div>
   <p id="nummer"></p>
 
 </div>
@@ -243,16 +252,33 @@ const billeder = [
 ];
 
 let aktuel = 0;
-let visteBilleder = new Set([0]);
+let raekkefoelge = [];
+let visteBilleder = new Set();
+
+function blandBilleder() {
+  raekkefoelge = billeder.map((_, i) => i);
+
+  for (let i = raekkefoelge.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [raekkefoelge[i], raekkefoelge[j]] =
+    [raekkefoelge[j], raekkefoelge[i]];
+  }
+
+  aktuel = 0;
+  visteBilleder = new Set();
+}
 
 let slideshowTimer;
 let tilbageTimer;
+let pauseTimer;
+let erPaaPause = false;
 
 const SKIFT_TID = 5000;
 const TILBAGE_TID = 10000;
 
 function visBillede() {
-  const fil = billeder[aktuel];
+  const fil = billeder[raekkefoelge[aktuel]];
 
   const billedmappe =
     "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/";
@@ -280,20 +306,60 @@ function visBillede() {
 
 function naeste() {
   aktuel = (aktuel + 1) % billeder.length;
-  visteBilleder.add(aktuel);
+  visteBilleder.add(raekkefoelge[aktuel]);
   visBillede();
 }
 
 function forrige() {
   aktuel = (aktuel - 1 + billeder.length) % billeder.length;
-  visteBilleder.add(aktuel);
   visBillede();
+}
+
+// Brugeren vælger at blive
+function blivPaaSiden() {
+  clearTimeout(tilbageTimer);
+
+  document.getElementById("inaktivOverlay").classList.remove("vis");
+
+  blandBilleder();
+  visteBilleder.add(raekkefoelge[aktuel]);
+
+  visBillede();
+  startSlideshow();
+}
+
+// Pause slideshow i 10 sekunder
+function pauseSlideshow() {
+
+  if (erPaaPause) return;
+
+  erPaaPause = true;
+
+  clearTimeout(slideshowTimer);
+
+  const knap = document.getElementById("pauseKnap");
+
+  knap.disabled = true;
+  knap.textContent = "⏸ Pause (10 sek.)";
+
+  pauseTimer = setTimeout(function() {
+
+    erPaaPause = false;
+
+    knap.disabled = false;
+    knap.textContent = "⏸ Pause";
+
+    startSlideshow();
+
+  }, 10000);
 }
 
 // Automatisk slideshow
 function startSlideshow() {
-  clearTimeout(slideshowTimer);
 
+  if (erPaaPause) return;
+
+  clearTimeout(slideshowTimer);
   slideshowTimer = setTimeout(function() {
 
     if (visteBilleder.size === billeder.length) {
@@ -325,10 +391,6 @@ function visInaktivBesked() {
   }, TILBAGE_TID);
 }
 
-// Brugeren vælger at blive
-function blivPaaSiden() {
-  clearTimeout(tilbageTimer);
-
   document.getElementById("inaktivOverlay").classList.remove("vis");
 
   // Start en ny runde med det aktuelle billede
@@ -337,7 +399,9 @@ function blivPaaSiden() {
   startSlideshow();
 }
 
-// Start slideshow
+// Start slideshow i tilfældig rækkefølge
+blandBilleder();
+visteBilleder.add(raekkefoelge[aktuel]);
 visBillede();
 startSlideshow();
 </script>
