@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="da">
 <head>
@@ -280,6 +279,8 @@ const TILBAGE_TID = 10000;
 function visBillede() {
   const fil = billeder[raekkefoelge[aktuel]];
 
+  visteBilleder.add(raekkefoelge[aktuel]);
+
   const billedmappe =
     "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/";
 
@@ -304,12 +305,13 @@ function visBillede() {
     (aktuel + 1) + " / " + billeder.length;
 }
 
+// Næste billede
 function naeste() {
   aktuel = (aktuel + 1) % billeder.length;
-  visteBilleder.add(raekkefoelge[aktuel]);
   visBillede();
 }
 
+// Forrige billede
 function forrige() {
   aktuel = (aktuel - 1 + billeder.length) % billeder.length;
   visBillede();
@@ -318,12 +320,17 @@ function forrige() {
 // Brugeren vælger at blive
 function blivPaaSiden() {
   clearTimeout(tilbageTimer);
+  clearTimeout(pauseTimer);
+
+  erPaaPause = false;
+
+  const knap = document.getElementById("pauseKnap");
+  knap.disabled = false;
+  knap.textContent = "⏸ Pause";
 
   document.getElementById("inaktivOverlay").classList.remove("vis");
 
   blandBilleder();
-  visteBilleder.add(raekkefoelge[aktuel]);
-
   visBillede();
   startSlideshow();
 }
@@ -360,6 +367,7 @@ function startSlideshow() {
   if (erPaaPause) return;
 
   clearTimeout(slideshowTimer);
+
   slideshowTimer = setTimeout(function() {
 
     if (visteBilleder.size === billeder.length) {
@@ -373,8 +381,9 @@ function startSlideshow() {
   }, SKIFT_TID);
 }
 
-// Vis boksen
+// Vis inaktivitetsvinduet
 function visInaktivBesked() {
+
   clearTimeout(slideshowTimer);
 
   const overlay = document.getElementById("inaktivOverlay");
@@ -391,17 +400,8 @@ function visInaktivBesked() {
   }, TILBAGE_TID);
 }
 
-  document.getElementById("inaktivOverlay").classList.remove("vis");
-
-  // Start en ny runde med det aktuelle billede
-  visteBilleder = new Set([aktuel]);
-
-  startSlideshow();
-}
-
 // Start slideshow i tilfældig rækkefølge
 blandBilleder();
-visteBilleder.add(raekkefoelge[aktuel]);
 visBillede();
 startSlideshow();
 </script>
