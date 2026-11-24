@@ -148,6 +148,22 @@ let aktuel = 0;
 function visBillede() {
   const fil = billeder[aktuel];
 
+  const billedmappe =
+    "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/";
+
+  document.getElementById("foto").src =
+    billedmappe + encodeURIComponent(fil);
+
+  let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
+  navn = navn.replace(/\s*-\s*/, " – ");
+  navn = navn.replace(/_/g, " ");
+
+  document.getElementById("billedtekst").textContent = navn;
+
+  document.getElementById("nummer").textContent =
+    (aktuel + 1) + " / " + billeder.length;
+}
+
  document.getElementById("foto").src =
   "https://raw.githubusercontent.com/anna262f-alt/infoskaerm/main/k%C3%A6ledyrsbilleder/" + encodeURIComponent(fil);
 
