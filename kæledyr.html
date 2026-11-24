@@ -104,6 +104,29 @@ h1 {
   ← Tilbage til forsiden
 </a>
 
+<!-- Automatisk tilbagefunktion -->
+
+<div class="inaktiv-overlay" id="inaktivOverlay">
+  <div class="inaktiv-vindue">
+
+    <h2>Er du her stadig?</h2>
+
+    <p>
+      Hvis du vil blive på siden, skal du trykke på knappen nedenfor.
+      Ellers vender skærmen automatisk tilbage til forsiden.
+    </p>
+
+    <button class="inaktiv-knap" onclick="blivPaaSiden()">
+      Jeg vil blive på siden
+    </button>
+
+    <div class="inaktiv-streg">
+      <div class="inaktiv-streg-indhold"></div>
+    </div>
+
+  </div>
+</div>
+
 <script>
 
 // DINE BILLEDFILNAVNE
@@ -142,10 +165,21 @@ const billeder = [
   "Peter_Tykkemis_001.jpeg"
 ];
 
+// DINE BILLEDFILNAVNE
+const billeder = [
+  "Anonym -  Milo.png"
+];
+
 let aktuel = 0;
+let visteBilleder = new Set([0]);
+
+let slideshowTimer;
+let tilbageTimer;
+
+const SKIFT_TID = 5000;
+const TILBAGE_TID = 10000;
 
 function visBillede() {
-
   const fil = billeder[aktuel];
 
   const billedmappe =
@@ -156,23 +190,15 @@ function visBillede() {
   foto.src = billedmappe + encodeURIComponent(fil);
 
   let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
+  navn = navn.replace(/[_\s-]*\d+$/, "");
+  navn = navn.replace(/_/g, " ");
+  navn = navn.trim().replace(/\s+/g, " ");
 
-// Fjern tallet til sidst
-navn = navn.replace(/[_\s-]*\d+$/, "");
+  if (!navn.includes(" - ") && !navn.includes(" – ")) {
+    navn = navn.replace(" ", " - ");
+  }
 
-// Erstat understregninger med mellemrum
-navn = navn.replace(/_/g, " ");
-
-// Ryd op i mellemrum
-navn = navn.trim().replace(/\s+/g, " ");
-
-// Sørg for bindestreg mellem ejer og kæledyr
-if (!navn.includes(" - ") && !navn.includes(" – ")) {
-  navn = navn.replace(" ", " - ");
-}
-
-// Brug samme pæne bindestreg hver gang
-navn = navn.replace(/\s*[-–]\s*/, " – ");
+  navn = navn.replace(/\s*[-–]\s*/, " – ");
 
   document.getElementById("billedtekst").textContent = navn;
 
@@ -182,21 +208,66 @@ navn = navn.replace(/\s*[-–]\s*/, " – ");
 
 function naeste() {
   aktuel = (aktuel + 1) % billeder.length;
+  visteBilleder.add(aktuel);
   visBillede();
 }
 
 function forrige() {
   aktuel = (aktuel - 1 + billeder.length) % billeder.length;
+  visteBilleder.add(aktuel);
   visBillede();
 }
 
-// Automatisk skift hvert 5. sekund
-setInterval(function() {
-  naeste();
-}, 5000);
+// Automatisk slideshow
+function startSlideshow() {
+  clearTimeout(slideshowTimer);
 
+  slideshowTimer = setTimeout(function() {
+
+    if (visteBilleder.size === billeder.length) {
+      visInaktivBesked();
+      return;
+    }
+
+    naeste();
+    startSlideshow();
+
+  }, SKIFT_TID);
+}
+
+// Vis boksen
+function visInaktivBesked() {
+  clearTimeout(slideshowTimer);
+
+  const overlay = document.getElementById("inaktivOverlay");
+  overlay.classList.add("vis");
+
+  const streg = overlay.querySelector(".inaktiv-streg-indhold");
+
+  streg.style.animation = "none";
+  void streg.offsetWidth;
+  streg.style.animation = "inaktivNedtaelling 10s linear forwards";
+
+  tilbageTimer = setTimeout(function() {
+    window.location.href = "index.html";
+  }, TILBAGE_TID);
+}
+
+// Brugeren vælger at blive
+function blivPaaSiden() {
+  clearTimeout(tilbageTimer);
+
+  document.getElementById("inaktivOverlay").classList.remove("vis");
+
+  // Start en ny runde med det aktuelle billede
+  visteBilleder = new Set([aktuel]);
+
+  startSlideshow();
+}
+
+// Start slideshow
 visBillede();
-
+startSlideshow();
 </script>
 
 </body>
