@@ -1,1 +1,163 @@
 
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kæledyrsfotos</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 24px;
+  background: #323D4F;
+  color: white;
+  text-align: center;
+}
+
+h1 {
+  margin-bottom: 25px;
+}
+
+.slideshow {
+  max-width: 850px;
+  margin: 25px auto;
+  background: #394658;
+  padding: 18px;
+  border-radius: 18px;
+  box-shadow: 0 4px 15px #00000030;
+}
+
+.billede {
+  width: 100%;
+  height: 480px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #202a38;
+}
+
+.billedtekst {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 18px 0;
+  color: white;
+}
+
+.knapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.knapper button {
+  padding: 13px 22px;
+  border: none;
+  border-radius: 10px;
+  background: #00A09A;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.knapper button:active {
+  transform: scale(0.95);
+}
+
+.tilbage {
+  display: inline-block;
+  margin-top: 25px;
+  color: white;
+  font-size: 17px;
+}
+
+@media (max-width: 600px) {
+  .billede {
+    height: 330px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🐾 Kæledyrsfotos 🐾</h1>
+
+<div class="slideshow">
+
+  <img id="foto" class="billede" src="" alt="Kæledyr">
+
+  <div id="billedtekst" class="billedtekst"></div>
+
+  <div class="knapper">
+    <button onclick="forrige()">← Forrige</button>
+    <button onclick="naeste()">Næste →</button>
+  </div>
+
+  <p id="nummer"></p>
+
+</div>
+
+<a class="tilbage" href="index.html">
+  ← Tilbage til forsiden
+</a>
+
+<script>
+
+// INDSÆT DINE BILLEDFILNAVNE HER
+const billeder = [
+  "Anna_Molly_001.jpeg",
+  "Anna_Molly_002.jpeg",
+  "Anna_Molly_003.jpeg",
+  "Anna_Molly_004.jpeg",
+  "Anonym - Milo.png",
+  "Anonym - Dolly.png",
+  "Anonym - Milo.png
+];
+
+// Her vises billedet og navnene
+let aktuel = 0;
+
+function visBillede() {
+  const fil = billeder[aktuel];
+
+  document.getElementById("foto").src =
+    "kæledyrsbilleder/" + fil;
+
+  // Fjern filtypen
+  let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
+
+  // Fjern nummer til sidst
+  navn = navn.replace(/_\d+$/, "");
+
+  // Erstat understregninger med mellemrum
+  navn = navn.replace(/_/g, " ");
+
+  // Vis ejer – kæledyr
+  navn = navn.replace(/\s*-\s*/, " – ");
+
+  document.getElementById("billedtekst").textContent = navn;
+
+  document.getElementById("nummer").textContent =
+    (aktuel + 1) + " / " + billeder.length;
+}
+
+function naeste() {
+  aktuel = (aktuel + 1) % billeder.length;
+  visBillede();
+}
+
+function forrige() {
+  aktuel = (aktuel - 1 + billeder.length) % billeder.length;
+  visBillede();
+}
+
+// Start slideshow
+visBillede();
+
+</script>
+
+</body>
+</html>
