@@ -338,22 +338,34 @@ function blivPaaSiden() {
 // Pause slideshow i 10 sekunder
 function pauseSlideshow() {
 
-  if (erPaaPause) return;
+  const knap = document.getElementById("pauseKnap");
 
+  // Hvis slideshowet er på pause
+  if (erPaaPause) {
+
+    clearTimeout(pauseTimer);
+
+    erPaaPause = false;
+
+    knap.disabled = false;
+    knap.textContent = "⏸ Pause";
+
+    startSlideshow();
+
+    return;
+  }
+
+  // Sæt slideshow på pause
   erPaaPause = true;
 
   clearTimeout(slideshowTimer);
 
-  const knap = document.getElementById("pauseKnap");
-
-  knap.disabled = true;
-  knap.textContent = "⏸ Pause (10 sek.)";
+  knap.textContent = "▶ Fortsæt";
 
   pauseTimer = setTimeout(function() {
 
     erPaaPause = false;
 
-    knap.disabled = false;
     knap.textContent = "⏸ Pause";
 
     startSlideshow();
