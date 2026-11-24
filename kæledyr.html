@@ -112,7 +112,7 @@ const billeder = [
   "Anna_Molly_002.jpeg",
   "Anna_Molly_003.jpeg",
   "Anna_Molly_004.jpeg",
-  "Anonym -  Milo.png",
+  "Anonym - Milo.png",
   "Anonym - Dolly.png",
   "Anonym_Milo_001.jpeg",
   "Carla_Sigga_002.jpeg",
@@ -126,10 +126,10 @@ const billeder = [
   "Caroline_Zivas_004.jpeg",
   "Caroline_Zivas_005.jpeg",
   "Caroline_Zivas_006.jpeg",
-  "Ditte -  Bonushunden.jpeg",
-  "Ditte -  Goedbadl.png",
+  "Ditte - Bonushunden.jpeg",
+  "Ditte - Goedbadl.png",
   "Elias_Jack_001.jpg",
-  "Oliver -  Duchess.png",
+  "Oliver - Duchess.png",
   "Oliver_Duchess_001.jpeg",
   "Oliver_Duchess_002.jpeg",
   "Oliver_Duchess_004.jpeg",
@@ -156,8 +156,23 @@ function visBillede() {
   foto.src = billedmappe + encodeURIComponent(fil);
 
   let navn = fil.replace(/\.(jpeg|jpg|png)$/i, "");
-  navn = navn.replace(/_/g, " ");
-  navn = navn.replace(/\s*-\s*/, " – ");
+
+// Fjern tallet til sidst
+navn = navn.replace(/[_\s-]*\d+$/, "");
+
+// Erstat understregninger med mellemrum
+navn = navn.replace(/_/g, " ");
+
+// Ryd op i mellemrum
+navn = navn.trim().replace(/\s+/g, " ");
+
+// Sørg for bindestreg mellem ejer og kæledyr
+if (!navn.includes(" - ") && !navn.includes(" – ")) {
+  navn = navn.replace(" ", " - ");
+}
+
+// Brug samme pæne bindestreg hver gang
+navn = navn.replace(/\s*[-–]\s*/, " – ");
 
   document.getElementById("billedtekst").textContent = navn;
 
