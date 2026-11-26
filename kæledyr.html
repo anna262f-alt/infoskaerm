@@ -162,6 +162,10 @@ h1 {
 
 /* Tilpas kæledyrssiden til skærmens størrelse */
 
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
   width: 100%;
@@ -169,98 +173,37 @@ body {
   margin: 0;
 }
 
-body {
-  height: 100vh;
-  height: 100dvh;
-  padding: 24px;
-  overflow: hidden;
+@media (max-height: 700px) {
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Overskriften */
-
-h1 {
-  flex-shrink: 0;
-  margin: 0 0 25px;
-}
-
-/* Selve billedfeltet */
-
-.slideshow {
-  width: 100%;
-  max-width: 850px;
-
-  flex: 1;
-  min-height: 0;
-
-  margin: 0 auto;
-  padding: 18px;
-
-  display: flex;
-  flex-direction: column;
-}
-
-/* Billedet bevarer sine proportioner */
-
-.billede {
-  width: 100%;
-  height: 480px;
-
-  flex: 1 1 480px;
-  min-height: 0;
-
-  object-fit: contain;
-}
-
-/* Billedteksten */
-
-.billedtekst {
-  flex-shrink: 0;
-  margin: 18px 0;
-}
-
-/* Knapperne */
-
-.knapper {
-  flex-shrink: 0;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-/* Nummer og tilbageknap */
-
-#nummer {
-  flex-shrink: 0;
-}
-
-.tilbage {
-  flex-shrink: 0;
-  margin-top: 25px;
-}
-
-/* Tilpasning ved zoom og mindre skærmhøjde */
-
-@media (max-height: 800px) {
   body {
+    height: 100vh;
+    height: 100dvh;
     padding: 10px;
-  }
+    overflow: hidden;
 
-  h1 {
-    margin-bottom: 10px;
-    font-size: 24px;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    gap: 8px;
+    justify-items: center;
   }
 
   .slideshow {
+    width: 100%;
+    max-width: 850px;
+    height: 100%;
+    min-height: 0;
+    margin: 0;
     padding: 10px;
-    margin: 0 auto;
+
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto auto auto;
   }
 
   .billede {
-    flex-basis: 0;
-    height: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: contain;
   }
 
   .billedtekst {
@@ -269,6 +212,9 @@ h1 {
   }
 
   .knapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
   }
 
@@ -277,22 +223,25 @@ h1 {
     font-size: 14px;
   }
 
-  .tilbage {
-    margin-top: 10px;
+  #nummer {
+    margin: 5px 0;
     font-size: 14px;
+  }
+
+  .tilbage {
+    display: block;
+    margin: 0;
+    padding: 5px;
+    font-size: 15px;
+    flex-shrink: 0;
   }
 }
 
-/* Tilpasning ved meget høj zoom */
-
 @media (max-height: 500px) {
+
   body {
     padding: 5px;
-  }
-
-  h1 {
-    margin-bottom: 5px;
-    font-size: 18px;
+    gap: 3px;
   }
 
   .slideshow {
@@ -300,7 +249,7 @@ h1 {
   }
 
   .billedtekst {
-    margin: 4px 0;
+    margin: 3px 0;
     font-size: 14px;
   }
 
@@ -314,44 +263,13 @@ h1 {
   }
 
   #nummer {
-    margin: 5px 0;
+    margin: 2px 0;
     font-size: 12px;
   }
 
   .tilbage {
-    margin-top: 5px;
     font-size: 12px;
   }
-}
-
-@media (max-height: 760px) {
-  .tilbage {
-    display: inline-block;
-    flex-shrink: 0;
-    margin-top: 8px;
-    margin-bottom: 4px;
-  }
-
-  body {
-    padding-bottom: 8px;
-  }
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  height: 100vh;
-  height: 100dvh;
-  padding-bottom: 8px;
-}
-
-.tilbage {
-  display: inline-block;
-  flex-shrink: 0;
-  margin-top: 8px;
-  margin-bottom: 8px;
 }
 </style>
 </head>
