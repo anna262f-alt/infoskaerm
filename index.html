@@ -244,6 +244,115 @@ footer{text-align:center;color:var(--turquoise);padding:0 20px 25px;font-size:12
 .card-head h3 {
   margin: 0;
 }
+
+/* Automatisk tilpasning til skærmens størrelse */
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+main {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  padding: clamp(8px, 1.5vh, 18px);
+  display: flex;
+  flex-direction: column;
+}
+
+.grid {
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(6px, 1.2vh, 14px);
+}
+
+.card,
+button.card-link {
+  min-height: 0;
+  height: 100%;
+  padding: clamp(8px, 1.5vh, 16px);
+  border-radius: clamp(8px, 1.5vh, 16px);
+}
+
+.card-head {
+  gap: clamp(5px, 1vw, 10px);
+  margin-bottom: clamp(5px, 1vh, 10px);
+}
+
+.icon {
+  flex-basis: clamp(28px, 5vh, 42px);
+  width: clamp(28px, 5vh, 42px);
+  height: clamp(28px, 5vh, 42px);
+  font-size: clamp(15px, 2.5vh, 22px);
+}
+
+.card h3,
+button.card-link h3 {
+  font-size: clamp(11px, 1.8vh, 17px);
+}
+
+.card p,
+.card ul {
+  font-size: clamp(10px, 1.5vh, 14px);
+  line-height: 1.35;
+}
+
+.card p + p {
+  margin-top: 5px;
+}
+
+/* Tilpasning til en smal skærm */
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+  }
+}
+
+/* Tilpasning til en meget lav skærm */
+
+@media (max-height: 600px) {
+  main {
+    padding: 6px;
+  }
+
+  .grid {
+    gap: 5px;
+  }
+
+  .card,
+  button.card-link {
+    padding: 6px;
+  }
+
+  .card-head {
+    margin-bottom: 4px;
+  }
+
+  .card h3,
+  button.card-link h3 {
+    font-size: clamp(10px, 2.2vh, 14px);
+  }
+
+  .card p,
+  .card ul {
+    font-size: clamp(9px, 1.8vh, 12px);
+    line-height: 1.2;
+  }
+}
 </style>
 </head>
   
