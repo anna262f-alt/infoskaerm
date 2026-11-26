@@ -415,10 +415,16 @@ function visBillede() {
     (aktuel + 1) + " / " + billeder.length;
 }
 
-// Næste billede
+// Næste billede – nulstil timeren
 function naeste() {
+  clearTimeout(slideshowTimer);
+
   aktuel = (aktuel + 1) % billeder.length;
   visBillede();
+
+  if (!erPaaPause) {
+    startSlideshow();
+  }
 }
 
 // Forrige billede
